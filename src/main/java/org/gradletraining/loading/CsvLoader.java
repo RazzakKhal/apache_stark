@@ -10,17 +10,15 @@ import java.net.URL;
 public class CsvLoader implements Loader {
 
     @Override
-    public void load(SparkSession sparkSession) {
-
+    public Dataset<Row> load(SparkSession sparkSession) {
+        System.out.println("chargement du DataFrame");
         Dataset<Row> dataset = sparkSession.read()
                 .option("header", "true")  // Utiliser la première ligne comme noms de colonnes
                 .option("inferSchema", "true")  // Détecter automatiquement les types de données
                 .csv(createCsvPath("csv/en.openfoodfacts.org.products.csv"));  // Remplacez par le chemin du fichier
+// modifier le séparateur
+        return dataset;
 
-        dataset.show();
-        dataset.printSchema();
-
-        System.out.println("chargement du DataFrame");
     }
 
 

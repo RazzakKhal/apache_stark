@@ -2,6 +2,7 @@ package org.gradletraining;
 
 import org.gradletraining.loading.CsvLoader;
 import org.gradletraining.spark.SessionHandler;
+import org.gradletraining.visualization.CsvDataFrameReader;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,8 +13,10 @@ public class Main {
        var session = sessionHandler.startSession();
 
         var loader = new CsvLoader();
-        loader.load(session);
+        var dataset = loader.load(session);
 
+        var reader = new CsvDataFrameReader();
+        reader.showData(dataset);
 
         sessionHandler.closeSession(session);
       //  sessionHandler.execute();
