@@ -5,18 +5,36 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.gradletraining.interfaces.Action;
 
+import java.net.URL;
+
 public class CsvLoader implements Loader {
 
     @Override
     public void load(SparkSession sparkSession) {
 
-      Dataset<Row> dataset = sparkSession.read()
+        Dataset<Row> dataset = sparkSession.read()
                 .option("header", "true")  // Utiliser la première ligne comme noms de colonnes
                 .option("inferSchema", "true")  // Détecter automatiquement les types de données
-                .csv("C:/Users/Pc/Desktop/TP_integration_donnee/csv/en.openfoodfacts.org.products.csv");  // Remplacez par le chemin du fichier
+                .csv(createCsvPath("csv/en.openfoodfacts.org.products.csv"));  // Remplacez par le chemin du fichier
 
+        dataset.show();
+        dataset.printSchema();
 
         System.out.println("chargement du DataFrame");
+    }
+
+
+    private String createCsvPath(String resourcePath){
+        URL resource = getClass().getClassLoader().getResource(resourcePath);
+
+        if (resource == null) {
+            throw new IllegalArgumentException("Fichier CSV non trouvé dans resources/csv/ !");
+        }
+
+        // Convertir en chemin utilisable par Spark
+        String csvPath = resource.getPath().replace("%20", " "); // Corriger les espaces
+
+        return csvPath;
     }
 
 
