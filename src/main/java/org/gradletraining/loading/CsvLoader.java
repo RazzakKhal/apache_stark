@@ -9,14 +9,17 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class CsvLoader implements Loader {
 
-    private final String[] columns = {"product_name", "brands", "countries", "ingredients_text", "labels", "packaging"};
+    private final String[] definedColumns = {"product_name", "brands", "countries", "ingredients_text", "labels", "packaging"};
     private final String resourcePath = "csv/en.openfoodfacts.org.products.csv";
 
+
+    // utiliser strategy pour Fichier limité ou non
     @Override
     public Dataset<Row> load(SparkSession sparkSession) throws IOException {
 
@@ -48,12 +51,19 @@ public class CsvLoader implements Loader {
 
 
 // modifier le séparateur
-        return filterData(dataset, columns);
+        return filterData(dataset, definedColumns);
 
     }
 
-    private Dataset<Row> filterData(Dataset<Row> dataset, String[] columns){
-        return dataset.selectExpr(columns);
+    private Dataset<Row> filterData(Dataset<Row> dataset, String[] defColumns){
+
+        var datasetColumns = Arrays.asList(dataset.columns()).stream()
+                .filter((column) ->
+                         Arrays.asList(defColumns).contains(column) || column.contains("100g")
+                )
+                .map(column -> "`" + column.replace("`", "") + "`")  // Échapper les colonnes problématiques avec des backticks
+                .toArray(String[]::new);
+        return dataset.selectExpr(datasetColumns);
     }
 
 
