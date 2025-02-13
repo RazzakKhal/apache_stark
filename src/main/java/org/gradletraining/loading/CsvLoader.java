@@ -3,19 +3,21 @@ package org.gradletraining.loading;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.gradletraining.interfaces.Action;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.List;
+
 import java.util.Scanner;
 
 public class CsvLoader implements Loader {
 
-    private final String[] definedColumns = {"product_name", "brands", "countries", "ingredients_text", "labels", "packaging"};
+    private final String[] definedColumns = {
+            "product_name", "brands", "countries", "ingredients_text", "labels", "packaging", "carbohydrates_100g", "sugars_100g",
+            "proteins_100g", "salt_100g", "sodium_100g", "fat_100g", "energy_100g", "energy-kcal_100g"
+    };
     private final String resourcePath = "csv/en.openfoodfacts.org.products.csv";
 
 
@@ -59,7 +61,7 @@ public class CsvLoader implements Loader {
 
         var datasetColumns = Arrays.asList(dataset.columns()).stream()
                 .filter((column) ->
-                         Arrays.asList(defColumns).contains(column) || column.contains("100g")
+                         Arrays.asList(defColumns).contains(column)
                 )
                 .map(column -> "`" + column.replace("`", "") + "`")  // Échapper les colonnes problématiques avec des backticks
                 .toArray(String[]::new);
