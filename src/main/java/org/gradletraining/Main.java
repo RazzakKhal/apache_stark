@@ -1,6 +1,7 @@
 package org.gradletraining;
 
 import org.gradletraining.cleaning.CsvCleaner;
+import org.gradletraining.export.CsvExporter;
 import org.gradletraining.loading.CsvLoader;
 import org.gradletraining.spark.SessionHandler;
 import org.gradletraining.transformation.DatasetTransformerImpl;
@@ -36,6 +37,9 @@ public class Main {
 
            System.out.println("Les data transformées");
            reader.showData(filteredData);
+
+           var exporter = new CsvExporter();
+           exporter.export(filteredData, "C:\\Users\\Pc\\Desktop\\TP_integration_donnee\\src\\main\\java\\org\\gradletraining\\filteredData");
        }
        catch (Exception e) {
            System.err.println(e.getMessage());

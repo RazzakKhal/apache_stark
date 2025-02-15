@@ -23,7 +23,6 @@ public class SessionHandler {
                 .appName("My Spark Application")  // Nom de l’application
                 .config("spark.master", "local") // Mode local avec 1 seul nœud
                 .getOrCreate();
-
         // Afficher les informations de la session
         System.out.println("SparkSession créé avec succès !");
         System.out.println("Application ID: " + spark.sparkContext().applicationId());
