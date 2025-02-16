@@ -7,7 +7,7 @@ import org.apache.spark.sql.functions;
 /**
  * responsable du nettoyage des données
  */
-public class CsvCleaner {
+public class CsvCleaner implements Cleaner{
 
     private final String[] textColumns = {
             "product_name", "brands", "countries", "ingredients_text", "labels", "packaging"
